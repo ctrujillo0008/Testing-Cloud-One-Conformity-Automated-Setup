@@ -1,6 +1,6 @@
 onnawsorgs==0.0.3
 onnawscfn==0.0.6
-onnconformity==0.0.2
+onnconformity==0.0.3
 onnmisc==0.0.1
 onnlogger==0.0.5
 requests
