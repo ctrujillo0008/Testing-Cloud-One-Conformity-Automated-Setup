@@ -10,6 +10,14 @@ Run the following command:
 pip3 install -r requirements.txt
 ```
 
+## Workflow
+
+1. The script discovers all of your AWS accounts. It then produces a CSV file.
+
+2. (Optional) Users add Conformity details to the CSV file.
+
+3. The script reads the CSV file and runs the Conformity CloudFormation template for each of the accounts specified. It then creates Conformity subscriptions for them too. 
+
 ## Usage
 
 1. Set the `CC_API_KEY` and `CC_REGION` environment variables to your Conformity API key and region respectively.
