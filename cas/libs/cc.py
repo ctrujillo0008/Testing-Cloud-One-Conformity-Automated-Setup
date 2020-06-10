@@ -12,7 +12,7 @@ class Cc:
         self.logger.entry('info', 'Creating Conformity subscriptions...')
 
         for account_id, settings in csv_entries.items():
-            role_arn = settings['CloudConformityRoleArn']
+            role_arn = settings.get('CloudConformityRoleArn', f'arn:aws:iam::{account_id}:role/CloudConformity')
             account_env = settings.get('ConformityEnvironment')
             cost_package = settings.get('ConformityCostPackage', False)
             rtm = settings.get('ConformityRTM', False)

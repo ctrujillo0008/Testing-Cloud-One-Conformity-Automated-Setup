@@ -37,19 +37,25 @@ class CcAutoSetup:
 
         self.logger.entry('info', 'Done')
 
-    def enable(self, input_file_path=DEFAULT_CSV_FILENAME):
+    def enable(self, enable_type='enable', input_file_path=DEFAULT_CSV_FILENAME):
         """Enable Conformity on specified accounts
 
         Reads `aws_conformity_accounts.csv` and sets up CloudFormation & Conformity accordingly.
 
+        `enable_type` can be either `enable` or `enable_cc`. The former will create both the CFN template and the Conformity account. The latter will only create the Conformity account. This enables users to deploy the CFN through other means, e.g StackSet.
+
         Args:
+            enable_type: `enable` or `enable_cc`
             input_file_path (str): Path to `aws_conformity_accounts.csv`
 
         Returns:
             None
         """
         csv_dict = csv_to_dict('Id', input_file_path)
-        self.cfn.enable(self.cc.org_id, csv_dict)
+
+        if enable_type == 'enable':
+            self.cfn.enable(self.cc.org_id, csv_dict)
+
         self.cc.enable(csv_dict)
         self.logger.entry('info', 'Done')
 
@@ -73,7 +79,7 @@ def main():
     # argv1 (mandatory): Action to take
     # argv2 (optional): Debug level
 
-    acceptable_args = ['enable', 'disable', 'csv']
+    acceptable_args = ['enable', 'disable', 'csv', 'enable_cc']
     args = sys.argv
 
     if args == 1:
@@ -96,8 +102,8 @@ def main():
     if arg == 'csv':
         auto_setup.generate_account_csv()
 
-    elif arg == 'enable':
-        auto_setup.enable()
+    elif 'enable' in arg:
+        auto_setup.enable(arg)
 
     elif arg == 'disable':
         auto_setup.disable()
