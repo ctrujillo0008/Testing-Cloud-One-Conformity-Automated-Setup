@@ -14,8 +14,13 @@ class Cc:
         for account_id, settings in csv_entries.items():
             role_arn = settings.get('CloudConformityRoleArn', f'arn:aws:iam::{account_id}:role/CloudConformity')
             account_env = settings.get('ConformityEnvironment')
-            cost_package = settings.get('ConformityCostPackage', False)
-            rtm = settings.get('ConformityRTM', False)
+
+            get_cost_package = settings.get('ConformityCostPackage')
+            cost_package = True if 'true' in get_cost_package.lower() else False
+
+            get_rtm = settings.get('ConformityRTM')
+            rtm = True if 'true' in get_rtm.lower() else False
+
             account_name = settings['ConformityAccountName']
 
             # Use AWS account name if user did not specify a Conformity account name

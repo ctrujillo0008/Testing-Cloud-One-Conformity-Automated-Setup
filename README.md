@@ -41,8 +41,8 @@ pip3 install -r requirements.txt
 4. (Optional) Fill in the following columns:
     * **ConformityAccountName** (Default: AWS account name)
     * **ConformityEnvironment** (No default)
-    * **ConformityCostPackage** (Default: None)
-    * **ConformityRTM** (Default: Disabled) 
+    * **ConformityCostPackage** (Default: false)
+    * **ConformityRTM** (Default: false) 
 
 5.  Run the script with the `enable` argument:
 
