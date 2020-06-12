@@ -31,8 +31,8 @@ class Cc:
 
             self.cc.create_subscription(account_id, role_arn, account_name, account_env, cost_package, rtm)
 
-    def disable(self, input_file_path):
-        aws_ids_to_delete = self._get_delete_aws_ids(input_file_path)
+    def disable(self, csv_list):
+        aws_ids_to_delete = self._get_delete_aws_ids(csv_list)
         conformity_delete_ids = self._get_delete_conformity_ids(aws_ids_to_delete)
 
         for conformity_id in conformity_delete_ids:
@@ -55,12 +55,10 @@ class Cc:
 
         return conformity_delete_ids
 
-    def _get_delete_aws_ids(self, input_file_path) -> list:
+    def _get_delete_aws_ids(self, csv_list) -> list:
         self.logger.entry('info', 'Extracting AWS IDs from CSV file...')
 
         delete_list = []
-
-        csv_list = csv_to_list(input_file_path)
 
         for entry in csv_list:
             aws_id = entry['Id']

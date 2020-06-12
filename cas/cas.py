@@ -2,7 +2,7 @@ import os
 from onnlogger import Loggers
 from libs import CcCfn
 from libs import Cc
-from onnmisc import csv_to_dict
+from onnmisc import csv_to_list
 import sys
 
 DEFAULT_LOG_LEVEL = 'INFO'
@@ -51,7 +51,11 @@ class CcAutoSetup:
         Returns:
             None
         """
-        csv_dict = csv_to_dict('Id', input_file_path)
+        # read CSV & ensure correct account numbers are provided
+        csv_list = self._read_csv(input_file_path)
+
+        # convert list to dict for easier processing
+        csv_dict = self._list_to_dict(key_name='Id', list_obj=csv_list)
 
         if enable_type == 'enable':
             self.cfn.enable(self.cc.org_id, csv_dict)
@@ -71,8 +75,101 @@ class CcAutoSetup:
             None
 
         """
-        self.cc.disable(input_file_path)
+        csv_list = self._read_csv(input_file_path)
+
+        self.cc.disable(csv_list)
         self.logger.entry('info', 'Done')
+
+    @staticmethod
+    def _read_csv(input_file_path) -> list:
+        """Description:
+            Reads CSV file into a list of dicts
+
+            When CSV files are opened in Excel, it removes leading 0's from integers. This method ensures the Account IDs are correct by pulling them from the ARN.
+
+        Args:
+            input_file_path (str): Path to `aws_conformity_accounts.csv`
+
+        Example:
+            Example usage:
+
+            >>> from pprint import pprint
+            >>> csv_list = self._read_csv(input_file_path)
+            >>> pprint(csv_list)
+             [{'Arn': 'arn:aws:organizations::1234567890123:account/o-f324ds23gs/098765432109',
+              'ConformityAccountName': '',
+              'ConformityCostPackage': '',
+              'ConformityEnvironment': '',
+              'ConformityRTM': '',
+              'Email': 'example@example.com',
+              'Id': '846381620374',
+              'JoinedMethod': 'CREATED',
+              'JoinedTimestamp': '2020-04-09 09:12:43.849000+10:00',
+              'Name': 'example',
+              'Status': 'ACTIVE'}]
+
+        Returns:
+            List of dicts
+        """
+        csv_list = csv_to_list(input_file_path)
+
+        for entry in csv_list:
+            arn = entry['Arn']
+            account_id = arn.rsplit('/', 1)[1]
+            entry['Id'] = account_id
+
+        return csv_list
+
+    @staticmethod
+    def _list_to_dict(key_name, list_obj):
+        """Description:
+            Converts a list of dicts into a dict with nested dicts
+
+            `key_name` is popped from each list entry and made the key of that same dictionary
+
+        Args:
+            key_name: Dictionary entry which becomes the key
+            list_obj: List of dicts
+
+        Example:
+            Example usage:
+
+            >>> from pprint import pprint
+            >>> account_list = [{'Arn': 'arn:aws:organizations::1234567890123:account/o-f324ds23gs/098765432109',
+              'ConformityAccountName': '',
+              'ConformityCostPackage': '',
+              'ConformityEnvironment': '',
+              'ConformityRTM': '',
+              'Email': 'example@example.com',
+              'Id': '223344556677',
+              'JoinedMethod': 'CREATED',
+              'JoinedTimestamp': '2020-04-09 09:12:43.849000+10:00',
+              'Name': 'example',
+              'Status': 'ACTIVE'}]
+            >>> account_dict = self._list_to_dict(key_name='Id', list_obj=account_list)
+            >>> pprint(account_dict)
+            {'223344556677': {'Arn': 'arn:aws:organizations::1234567890123:account/o-f324ds23gs/098765432109',
+                  'ConformityAccountName': '',
+                  'ConformityCostPackage': '',
+                  'ConformityEnvironment': '',
+                  'ConformityRTM': '',
+                  'Email': 'example@example.com',
+                  'JoinedMethod': 'CREATED',
+                  'JoinedTimestamp': '2020-04-09 09:12:43.849000+10:00',
+                  'Name': 'example',
+                  'Status': 'ACTIVE'}}
+
+        Returns:
+            dict
+
+        """
+        output = dict()
+
+        for entry in list_obj:
+            account_id = entry.pop(key_name)
+            output[account_id] = entry
+
+        return output
 
 
 def main():
