@@ -25,7 +25,7 @@ class CcAutoSetup:
         Examples:
             Example output:
 
-            Id,Arn,Email,Name,Status,JoinedMethod,JoinedTimestamp,ConformityAccountName,ConformityEnvironment,ConformityCostPackage,ConformityRTM
+            Id,Arn,Email,Name,Status,JoinedMethod,JoinedTimestamp,ConformityAccountName,ConformityEnvironment,ConformityCostPackage
             123456789012,arn:aws:organizations::555555555555:account/o-632fj3kfna/123456789012,john@example.com,John Doe,ACTIVE,CREATED,2020-01-13 13:55:33.504000+11:00,,,,
             098765432109,arn:aws:organizations::555555555555:account/o-632fj3kfna/098765432109,jane@example.com,Jane Doe,ACTIVE,CREATED,2020-03-30 16:09:40.916000+11:00,,,,
 
@@ -100,7 +100,6 @@ class CcAutoSetup:
               'ConformityAccountName': '',
               'ConformityCostPackage': '',
               'ConformityEnvironment': '',
-              'ConformityRTM': '',
               'Email': 'example@example.com',
               'Id': '846381620374',
               'JoinedMethod': 'CREATED',
@@ -139,7 +138,6 @@ class CcAutoSetup:
               'ConformityAccountName': '',
               'ConformityCostPackage': '',
               'ConformityEnvironment': '',
-              'ConformityRTM': '',
               'Email': 'example@example.com',
               'Id': '223344556677',
               'JoinedMethod': 'CREATED',
@@ -152,7 +150,6 @@ class CcAutoSetup:
                   'ConformityAccountName': '',
                   'ConformityCostPackage': '',
                   'ConformityEnvironment': '',
-                  'ConformityRTM': '',
                   'Email': 'example@example.com',
                   'JoinedMethod': 'CREATED',
                   'JoinedTimestamp': '2020-04-09 09:12:43.849000+10:00',

@@ -17,10 +17,7 @@ class Cc:
 
             get_cost_package = settings.get('ConformityCostPackage')
             cost_package = True if 'true' in get_cost_package.lower() else False
-
-            get_rtm = settings.get('ConformityRTM')
-            rtm = True if 'true' in get_rtm.lower() else False
-
+            
             account_name = settings['ConformityAccountName']
 
             # Use AWS account name if user did not specify a Conformity account name
@@ -29,7 +26,7 @@ class Cc:
 
             self.logger.entry('debug', f'Creating subscription for "{account_name}" ({account_id})')
 
-            self.cc.create_subscription(account_id, role_arn, account_name, account_env, cost_package, rtm)
+            self.cc.create_subscription(account_id, role_arn, account_name, account_env, cost_package)
 
     def disable(self, csv_list):
         aws_ids_to_delete = self._get_delete_aws_ids(csv_list)
